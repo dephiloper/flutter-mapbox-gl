@@ -8,6 +8,13 @@ Future<String> _loadJson() async {
 }
 
 void main() async {
+  // for offline side loading
+  //try {
+  //  await installOfflineMapTiles("assets/mapcache.db");
+  //} catch (err) {
+  //  print(err);
+  //}
+
   _customStyle = await _loadJson();
   runApp(MyApp());
 }
@@ -38,10 +45,10 @@ class _MapWidgetState extends State<MapWidget> {
   String _styleString = "mapbox://styles/mapbox/outdoors-v11";
   bool _rotateGesturesEnabled = true;
   bool _scrollGesturesEnabled = true;
-  bool _tiltGesturesEnabled = false;
+  bool _tiltGesturesEnabled = true;
   bool _zoomGesturesEnabled = true;
-  bool _myLocationEnabled = false;
-  MyLocationTrackingMode _myLocationTrackingMode = MyLocationTrackingMode.None;
+  bool _myLocationEnabled = true;
+  MyLocationTrackingMode _myLocationTrackingMode = MyLocationTrackingMode.Tracking;
 
   _MapWidgetState._(this._kInitialPosition, this._position, this._cameraTargetBounds);
 
@@ -79,6 +86,20 @@ class _MapWidgetState extends State<MapWidget> {
     super.dispose();
   }
 
+  Widget _myLocationTrackingModeCycler() {
+    final MyLocationTrackingMode nextType =
+    MyLocationTrackingMode.values[(_myLocationTrackingMode.index + 1) % MyLocationTrackingMode.values.length];
+    return FlatButton(
+      child: Text('change to $nextType'),
+      onPressed: () {
+        setState(() {
+          _myLocationTrackingMode = nextType;
+        });
+      },
+    );
+  }
+
+
   void _extractMapInfo() {
     _position = mapController.cameraPosition;
     _isMoving = mapController.isCameraMoving;
@@ -86,21 +107,23 @@ class _MapWidgetState extends State<MapWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: _buildMapBox(context),
+    return Scaffold(
+      body: Container(
+        child: _buildMapBox(context),
+      ),
+      floatingActionButton: _myLocationTrackingModeCycler(),
     );
   }
 
   MapboxMap _buildMapBox(BuildContext context) {
     return MapboxMap(
-          //       "tiles": ["https://d25uarhxywzl1j.cloudfront.net/v0.1/{z}/{x}/{y}.mvt"],
         onMapCreated: onMapCreated,
         initialCameraPosition: this._kInitialPosition,
         trackCameraPosition: true,
         compassEnabled: _compassEnabled,
         cameraTargetBounds: _cameraTargetBounds,
         minMaxZoomPreference: _minMaxZoomPreference,
-        styleString: _customStyle,//_styleString,
+        styleString: _styleString,// _customStyle, for offline use
         rotateGesturesEnabled: _rotateGesturesEnabled,
         scrollGesturesEnabled: _scrollGesturesEnabled,
         tiltGesturesEnabled: _tiltGesturesEnabled,

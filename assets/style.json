@@ -4,14 +4,14 @@
   "sources": {
     "openmaptiles": {
       "type": "vector",
-      "tiles": ["http://192.168.178.20:8080/data/v3/{z}/{x}/{y}.pbf"],
+      "tiles": ["http://add-uri-here:8080/data/v3/{z}/{x}/{y}.pbf"],
       "name": "OpenMapTiles",
       "format": "pbf",
       "basename": "germany_berlin.mbtiles",
       "id": "openmaptiles"
     }
   },
-  "glyphs": "http://192.168.178.20:8080/fonts/{fontstack}/{range}.pbf",
+  "glyphs": "http://add-uri-here:8080/fonts/{fontstack}/{range}.pbf",
   "layers": [
     {
       "id": "background",

@@ -45,6 +45,7 @@ flutter:
   assets:
     - assets/mapillary-custom-style.json
     - assets/style.json
+    - assets/mapcache.db
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
